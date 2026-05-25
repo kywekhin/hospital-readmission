@@ -1,0 +1,28 @@
+# database files - auto-generated, do not commit
+data/*.db
+
+# large raw data files - download from UCI instead
+# remove the next line if diabetic_data.csv is under 50MB
+# data/diabetic_data.csv
+
+# jupyter checkpoints
+.ipynb_checkpoints/
+
+# python cache
+__pycache__/
+*.pyc
+
+# CMS hospital data - too large, external source
+data/hospitals_current_data/*
+
+*.csvgit reset HEAD .
+
+# database files
+data/*.db
+
+# jupyter checkpoints
+.ipynb_checkpoints/
+
+# python cache
+__pycache__/
+*.pyc
