@@ -19,14 +19,14 @@ In those cases, for your doctor or discharge nurse, being able to necessary data
 
 <h3>Current progress! Now loading . . . .</h3>
 <p>31/5/2026 - datasets have been loaded, .gitignore has been fixed, and here are the current insights (copied from markdown in the notebook):
-<h4>## Baseline Readmission Rate<h4>
+<h4>## Baseline Readmission Rate</h4>
 <ul>After examining the Excel output, each category is always around 13% for the readmission rates regardless of the value.
 So a model predicting binary value (readmitted within or more than 30 days) would achieve 87% accuracy as well.
-Therefore F1 score and recall will be the main measurment of acurracy for our model.<ul>
+Therefore F1 score and recall will be the main measurment of acurracy for our model.</ul>
 
-<h4>## Readmission Rate Distributions<h4>
+<h4>## Readmission Rate Distributions</h4>
 <ul>Number of inpatient visits might be the strongest indicator since as this number increases, the more likely they will be readmitted because it is indictor of severity or the chronic level of diabetes.
-Contrary to this, time spent in hospital does not visibly guard against readmission since the rate stays relatively stable as time spent increases. <ul>
+Contrary to this, time spent in hospital does not visibly guard against readmission since the rate stays relatively stable as time spent increases. </ul>
 
 <p>22/6/2026 - Encoding missing values in progress and the decision to leave NaN values as is without replacing comes from after cross-tabulation which revealed certain sets of columns that are missing altogether (i.e. MAR so the unknown itself has value) </p>
 <p>A threshold of 40% "Unknown" value was used to drop columns, unless there was a distinct pattern in the crosstab check hinting at MAR</p>
