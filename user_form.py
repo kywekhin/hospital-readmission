@@ -153,3 +153,6 @@ def predict(n_clicks, age, diag_1, diag_2, diag_3, a1c,
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8050)
