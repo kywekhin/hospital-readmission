@@ -8,5 +8,6 @@ data/*.db
 __pycache__/
 *.pyc
 
+models/*.pkl
 
 data/*.csv
