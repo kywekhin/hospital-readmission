@@ -10,4 +10,6 @@ __pycache__/
 
 models/*.pkl
 
-data/*.csv
+data/diabetic_data.db
+
+data/IDS_mapping.csv
