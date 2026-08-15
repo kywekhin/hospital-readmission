@@ -1,4 +1,4 @@
-Hi there! Thanks for coming to check out my project :D Below is a couple of FAQs and the current progress:
+Hi there! Thanks for coming to check out my project :D The dashboard is now live at: https://diabetic-patient-readmission.onrender.com/ Below is a brief overview about this project:
 
 <h3>1. What is the goal of this project?</h3>
 <ul>The goal is to take records of diabetic patients in the US, and find the most important features in predicting readmission within 30 days by training a ML model.</ul>
@@ -8,7 +8,7 @@ Hi there! Thanks for coming to check out my project :D Below is a couple of FAQs
 
 But what happens if the doctor doesn't have the time or resources to sit down and communicate to assess risk? What if there are gaps in your medical records because of migrating providers or your insurance company is not dilligent enough?
 
-In those cases, for your doctor or discharge nurse, being able to necessary data and get an accurate gauge in if the patient needs follow up or close monitoring would help significantly in the  quality and long term outcome of the care provided to the patient.</ul>
+In those cases, for your doctor or discharge nurse, being able to get the necessary data to accurately gauge if the patient needs follow up before discharging or not would help significantly in the  quality and long term outcome of the care provided to the patient.</ul>
 
 <h3>2. What can we expect from this project?</h3>
 <ul>The final product will be an interactive dashboard where you can input your own patient data and get a probability predicting readmission within 30 days.</ul>
@@ -31,3 +31,5 @@ Contrary to this, time spent in hospital does not visibly guard against readmiss
 <p>22/6/2026 - Encoding missing values in progress and the decision to leave NaN values as is without replacing comes from after cross-tabulation which revealed certain sets of columns that are missing altogether (i.e. MAR so the unknown itself has value) </p>
 <p>A threshold of 40% "Unknown" value was used to drop columns, unless there was a distinct pattern in the crosstab check hinting at MAR</p>
 <p>A threshold of 90% "Uniform" (i.e. percentage of most common value) was used to identify and drop columns that add noise as there was a noticeable jump between 89.5% for glyburide and 92.8% for pioglitazone</p>
+
+
