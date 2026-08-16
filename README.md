@@ -1,35 +1,84 @@
-Hi there! Thanks for coming to check out my project :D The dashboard is now live at: https://diabetic-patient-readmission.onrender.com/ Below is a brief overview about this project:
+# Hospital Readmission Risk Predictor
 
-<h3>1. What is the goal of this project?</h3>
-<ul>The goal is to take records of diabetic patients in the US, and find the most important features in predicting readmission within 30 days by training a ML model.</ul>
+A machine learning project that predicts 30-day hospital readmission risk for diabetic patients, delivered as an easy-to-use web application with insight on the inputted data point.
 
-<h3>1a. But wait, wouldn't the doctor be able to gauge what their patient will need?</h3>
-<ul>Of couse best case scenario is your doctor being able to reach the conclusion that you will need close monitoring and you are high risk for readmission.
+🔗 **[Live Dashboard](https://diabetic-patient-readmission.onrender.com/)**
 
-But what happens if the doctor doesn't have the time or resources to sit down and communicate to assess risk? What if there are gaps in your medical records because of migrating providers or your insurance company is not dilligent enough?
+---
 
-In those cases, for your doctor or discharge nurse, being able to get the necessary data to accurately gauge if the patient needs follow up before discharging or not would help significantly in the  quality and long term outcome of the care provided to the patient.</ul>
+## The Problem
 
-<h3>2. What can we expect from this project?</h3>
-<ul>The final product will be an interactive dashboard where you can input your own patient data and get a probability predicting readmission within 30 days.</ul>
+For diabetic patients, false positives on readmission risk causes unnecessary medical charges to a patient and false negatives may lead to worsening complications from diabetes. The challenge is that clinicians at discharge often lack a quick, data-driven way to flag which patients need close follow-up. This tool addresses that gap.
 
-<h3>3. What datasets are being used?</h3>
-<ul><a href="https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008">Diabetic patient records dataset</a> courtesy of Beata Strack, Jonathan P. DeShazo, Chris Gennings, Juan L. Olmo, Sebastian Ventura, Krzysztof J. Cios, and John N. Clore</ul>
-<ul><a href="https://data.cms.gov/provider-data/topics/hospitals">Hospital quality data dataset</a> courtesy of data.cms.gov</ul>
+---
 
-<h3>Current progress! Now loading . . . .</h3>
-<p>31/5/2026 - datasets have been loaded, .gitignore has been fixed, and here are the current insights (copied from markdown in the notebook):
-<h4>## Baseline Readmission Rate</h4>
-<ul>After examining the Excel output, each category is always around 13% for the readmission rates regardless of the value.
-So a model predicting binary value (readmitted within or more than 30 days) would achieve 87% accuracy as well.
-Therefore F1 score and recall will be the main measurment of acurracy for our model.</ul>
+## What It Does
 
-<h4>## Readmission Rate Distributions</h4>
-<ul>Number of inpatient visits might be the strongest indicator since as this number increases, the more likely they will be readmitted because it is indictor of severity or the chronic level of diabetes.
-Contrary to this, time spent in hospital does not visibly guard against readmission since the rate stays relatively stable as time spent increases. </ul>
+A clinician fills in 11 patient fields at the point of discharge and receives:
 
-<p>22/6/2026 - Encoding missing values in progress and the decision to leave NaN values as is without replacing comes from after cross-tabulation which revealed certain sets of columns that are missing altogether (i.e. MAR so the unknown itself has value) </p>
-<p>A threshold of 40% "Unknown" value was used to drop columns, unless there was a distinct pattern in the crosstab check hinting at MAR</p>
-<p>A threshold of 90% "Uniform" (i.e. percentage of most common value) was used to identify and drop columns that add noise as there was a noticeable jump between 89.5% for glyburide and 92.8% for pioglitazone</p>
+- A **risk tier** (Low / Medium / High) based on a tuned probability threshold
+- A **population distribution chart** showing where the patient falls relative to ~20,000 test cases
+- A **feature importance chart** showing the top 10 predictors driving the model
+- A plain-language summary for non-technical clinical staff
+
+---
+
+## Dataset
+
+[Diabetes 130-US Hospitals (1999–2008)](https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008) — UCI Machine Learning Repository
+
+- **101,766 encounters** across 130 US hospitals
+- **50 features** covering patient demographics, diagnoses, medications, and lab results
+- Target: readmitted within 30 days (binary — 11% positive rate)
+- Original authors: Strack, DeShazo, Gennings, Olmo, Ventura, Cios, and Clore
+
+> The raw CSV is not committed to this repo due to size. Download it from the UCI link above and place it at `data/diabetic_data.csv` before running `train.py`.
+
+---
+
+## Methodology
+
+### Data Cleaning
+- Replaced `'?'` placeholder strings with `NaN` 
+- Dropped columns with >40% missing values (`weight`, `max_glu_serum`, `medical_specialty`), with exceptions where cross-tabulation revealed MAR (Missing At Random) patterns. In those cases `'Unknown'` was retained as a meaningful category
+- Dropped near-constant columns (>90% single value) identified by a natural gap in the dominance distribution between `glyburide` (89.5%) and `pioglitazone` (92.8%)
+- Dropped `race` to avoid encoding potential systemic bias as a predictive signal
+- Reduced ~700 unique ICD-9 diagnosis codes to 19 clinical categories using standard code range mapping
+
+### Feature Engineering
+- `A1Cresult` converted to binary (was the test ordered at all?) — consistent with Strack et al.'s finding that A1C *measurement* is more predictive than the result value itself
+- Age brackets label-encoded ordinally (0–9)
+- Medication dosage changes encoded as 0–3 (No/Steady/Down/Up)
+- Diagnosis columns one-hot encoded (57 dummy columns across diag_1/2/3)
+
+### Class Imbalance
+The target variable is heavily imbalanced (~11% positive). Two strategies were combined:
+- `class_weight='balanced'` in the Random Forest to penalise minority class errors during training
+- **SMOTE** (Synthetic Minority Oversampling Technique) on the training set only — the test set retains the real-world distribution
+
+### Train/Test Split
+Split was performed at the **patient level** (on `patient_nbr`), not the row level, to prevent the same patient's multiple visits from appearing in both train and test sets to prevent data leakage.
+
+### Model
+- **Random Forest Classifier** was chosen for robustness to mixed feature types, resistance to multicollinearity, and built-in feature importance
+- `n_estimators=50`, `max_depth=10` (depth constraint reduces file size from ~288MB to manageable without meaningful accuracy loss)
+
+### Evaluation
+| Metric | Value |
+|---|---|
+| AUC-ROC | 0.61 |
+| Recall (class 1, threshold 0.20) | 0.40 |
+| Precision (class 1, threshold 0.20) | 0.16 |
+| F1 (class 1, threshold 0.20) | 0.22 |
+
+The default 0.50 threshold produced near-zero recall on the minority class. Threshold was tuned to **0.20** by checking F1 values for various thresholds. AUC of 0.61 is above random (0.50) but below strong commercial models (~0.70), which is consistent with the documentation on this dataset. Lack of personal but important data (vitals, labs, lifestyle) prevents being able to learn on what could've been strong predictors. The threshold was chosen to maximise recall (catching actual readmissions), which trades off precision so roughly 84% of flagged patients will not be readmitted but in the trade off between extra cost of staying in the hospitals and missing a potentially lethal complication on a discharged patient, I have chosen to err on the safe side. 
 
 
+### Risk Tiers
+| Tier | Probability |
+|---|---|
+| 🟢 Low | < 10% |
+| 🟡 Medium | 10–21% |
+| 🔴 High | > 21% |
+
+---
