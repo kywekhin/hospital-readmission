@@ -7,6 +7,7 @@ A machine learning project that predicts 30-day hospital readmission risk for di
 I've built a Power BI dashboard to examine some of the trends in more detail:
 <img width="1290" height="712" alt="image" src="https://github.com/user-attachments/assets/c183b34b-1695-42dd-9a49-d43050b342f1" />
 Here is the link to the live dashboard: https://app.powerbi.com/groups/me/reports/fdd9503e-252c-4d1b-9c95-fae5381feffe/69c4f82d426de0b84730?experience=power-bi
+
 ---
 
 ## The Problem
