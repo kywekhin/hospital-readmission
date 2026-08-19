@@ -2,8 +2,11 @@
 
 A machine learning project that predicts 30-day hospital readmission risk for diabetic patients, delivered as an easy-to-use web application with insight on the inputted data point.
 
-🔗 **[Live Dashboard](https://diabetic-patient-readmission.onrender.com/)**
+🔗 **[Live Dashboard](https://diabetic-patient-readmission.onrender.com/)** (Please note there is a bit of a wait time since the server has to boot up first on the free tier of Render)
 
+I've built a Power BI dashboard to examine some of the trends in more detail:
+<img width="1290" height="712" alt="image" src="https://github.com/user-attachments/assets/c183b34b-1695-42dd-9a49-d43050b342f1" />
+Here is the link to the live dashboard: https://app.powerbi.com/groups/me/reports/fdd9503e-252c-4d1b-9c95-fae5381feffe/69c4f82d426de0b84730?experience=power-bi
 ---
 
 ## The Problem
@@ -25,7 +28,7 @@ A clinician fills in 11 patient fields at the point of discharge and receives:
 
 ## Dataset
 
-[Diabetes 130-US Hospitals (1999–2008)](https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008) — UCI Machine Learning Repository
+Clore, John, et al. "Diabetes 130-US Hospitals for Years 1999-2008." UCI Machine Learning Repository, 2014, https://doi.org/10.24432/C5230J.
 
 - **101,766 encounters** across 130 US hospitals
 - **50 features** covering patient demographics, diagnoses, medications, and lab results
