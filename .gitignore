@@ -13,3 +13,5 @@ models/*.pkl
 data/diabetic_data.db
 
 data/IDS_mapping.csv
+
+data/Diabetic Readmission.pbix
